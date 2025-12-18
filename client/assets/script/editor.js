@@ -48,6 +48,10 @@ export function updateLineNumbers() {
     }
 }
 
+textarea.addEventListener('scroll', () => {
+    lineNumbers.scrollTop = textarea.scrollTop;
+});
+
 // ---------- Main compile function ----------
 export async function fetchCompile() {
     const svg = await fetchSvg(textarea.value, { children: fileTree.children });

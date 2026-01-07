@@ -69,8 +69,7 @@ export async function fetchCompile() {
                 const match = errorDetails.match(/\(([^)]+)\)/);
                 const insideParentheses = match ? match[1] : "";
                 
-                errorSuppDetail = insideParentheses.split("/app")[1]
-                console.log(errorSuppDetail)
+                errorSuppDetail = insideParentheses.split("/app")[1] || "unknown path";
             } else {
                 errorSuppDetail=errorDetails
             }   

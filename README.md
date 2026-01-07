@@ -52,5 +52,8 @@ Refer to the corresponding README:
 └── LICENSE
 ```
 
+## User attention
+If you start the server manually (without Docker), make sure to open **ONLY** the `client` folder when starting the Live Server.
+
 ## License
 This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE) file for details.

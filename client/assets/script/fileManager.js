@@ -99,10 +99,12 @@ export function initFileManager(btnShowImages, btnCreateFolder, btnUploadImages,
         if (!folderName) return;
         createFolder(fileTree, folderName);
     })
-    btnUploadImages.addEventListener("click", () => {
+    btnUploadImages.addEventListener("click", (e) => {
+        e.preventDefault();
         imageFilesInput.click();
     });
     imageFilesInput.addEventListener("change", (event) => {
+        event.preventDefault();
         const files = Array.from(event.target.files);
 
         const targetFolder = getFolder(fileTree, currentFolderPath);

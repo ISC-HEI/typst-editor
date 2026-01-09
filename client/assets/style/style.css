@@ -231,3 +231,6 @@ ul {
     font-weight: bold;
     cursor: pointer;
 }
+.selected-folder {
+    background-color: #00000020;
+}

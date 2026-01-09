@@ -1,14 +1,8 @@
-import { fetchCompile, fileTree, currentFolderPath } from './editor.js';
+import { fetchCompile, fileTree } from './editor.js';
 
 const imageList = document.getElementById('imageList');
 const imageExplorer = document.getElementById("imageExplorer");
-
-export function createFolder(fileTree, folderName) {
-    if (!fileTree.children[folderName]) {
-        fileTree.children[folderName] = { type: "folder", name: folderName, children: {} };
-    }
-    renderFileExplorer(fileTree);
-}
+let selectedFolderPath = "root";
 
 export function getFolder(fileTree, path) {
     if (path === "root") return fileTree;
@@ -38,33 +32,50 @@ function renderTreeRecursive(folder, container, path) {
         const btnDelete = document.createElement("button");
         btnDelete.textContent = "x";
         btnDelete.classList.add("btn-delete");
-        btnDelete.addEventListener("click", (e) => {
+        btnDelete.onclick = (e) => {
             e.stopPropagation();
             const fullPath = path ? `${path}/${item.name}` : item.name;
             deleteItem(fullPath, fileTree);
-        });
+        };
 
         if (item.type === "folder") {
+            const currentPath = path ? `${path}/${item.name}` : item.name;
             li.innerHTML = `📁 <strong>${item.name}</strong>`;
+            li.classList.add("folder-item");
+            
+            li.addEventListener("click", (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
+                li.classList.add('selected-folder');
+                selectedFolderPath = currentPath;
+                console.log("Target folder set to:", selectedFolderPath);
+            });
 
             li.draggable = true;
-            li.addEventListener('dragstart', e => { e.dataTransfer.setData("path", path ? `${path}/${item.name}` : item.name); e.stopPropagation(); });
+            li.addEventListener('dragstart', e => { e.dataTransfer.setData("path", currentPath); e.stopPropagation(); });
             li.addEventListener('dragover', e => { e.preventDefault(); li.style.background = "#eef"; });
             li.addEventListener('dragleave', () => { li.style.background = "transparent"; });
             li.addEventListener('drop', e => {
-                e.preventDefault(); li.style.background = "transparent";
+                e.preventDefault(); 
+                li.style.background = "transparent";
                 const sourcePath = e.dataTransfer.getData("path");
-                moveItem(sourcePath, path ? `${path}/${item.name}` : item.name, folder);
+                moveItem(sourcePath, currentPath, fileTree);
             });
             li.appendChild(btnDelete);
             container.appendChild(li);
-            const ul = document.createElement("ul"); ul.style.marginLeft="20px"; li.appendChild(ul);
-            renderTreeRecursive(item, ul, path ? `${path}/${item.name}` : item.name);
-        }
-        if (item.type === "file") {
+            const ul = document.createElement("ul"); 
+            ul.style.marginLeft="20px"; 
+            li.appendChild(ul);
+            renderTreeRecursive(item, ul, currentPath);
+
+        } else if (item.type === "file") {
             li.innerHTML = `🖼️ ${item.name}`;
             li.draggable = true;
-            li.addEventListener('dragstart', e => { e.dataTransfer.setData("path", item.fullPath || item.name); e.stopPropagation(); });
+            li.addEventListener('dragstart', e => { 
+                const filePath = path ? `${path}/${item.name}` : item.name;
+                e.dataTransfer.setData("path", filePath); 
+                e.stopPropagation(); 
+            });
             li.appendChild(btnDelete);
             container.appendChild(li);
         }
@@ -107,39 +118,48 @@ export function initFileManager(btnShowImages, btnCreateFolder, btnUploadImages,
     btnShowImages.addEventListener("click", () => {
         imageExplorer.style.display = imageExplorer.style.display === "none" ? "block" : "none";
     });
+    rootDropZone.addEventListener("click", () => {
+        document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
+        selectedFolderPath = "root";
+        console.log("Target folder set to: root");
+    });
     btnCreateFolder.addEventListener("click", () => {
-        const folderName = prompt("Nom du dossier ?");
+        const folderName = prompt(`Create new folder in ${selectedFolderPath}:`);
         if (!folderName) return;
-        createFolder(fileTree, folderName);
-    })
+
+        const targetFolder = getFolder(fileTree, selectedFolderPath);
+        if (targetFolder) {
+            if (!targetFolder.children[folderName]) {
+                targetFolder.children[folderName] = { type: "folder", name: folderName, children: {} };
+                renderFileExplorer(fileTree);
+                saveFileTree();
+                selectedFolderPath="root"
+            }
+        }
+    });
     btnUploadImages.addEventListener("click", (e) => {
         e.preventDefault();
         imageFilesInput.click();
     });
     imageFilesInput.addEventListener("change", (event) => {
-        event.preventDefault();
         const files = Array.from(event.target.files);
-
-        const targetFolder = getFolder(fileTree, currentFolderPath);
+        const targetFolder = getFolder(fileTree, selectedFolderPath);
+        
         if (!targetFolder) {
-            alert("Dossier invalide");
+            alert("Invalid target folder");
             return;
         }
 
         files.forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
-                const base64 = e.target.result;
-
                 targetFolder.children[file.name] = {
                     type: "file",
                     name: file.name,
-                    fullPath: `${currentFolderPath}/${file.name}`,
-                    data: base64
+                    fullPath: selectedFolderPath === "root" ? file.name : `${selectedFolderPath}/${file.name}`,
+                    data: e.target.result
                 };
-
                 saveFileTree();
-
                 renderFileExplorer(fileTree);
                 fetchCompile();
             };
@@ -178,6 +198,7 @@ export function loadFileTree() {
 }
 
 function deleteItem(path, fileTree) {
+    document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
     const parts = path.split("/").filter(x=>x);
     const name = parts[parts.length-1];
     const parentPath = parts.slice(0,-1).join("/") || "root";
@@ -189,6 +210,7 @@ function deleteItem(path, fileTree) {
     saveFileTree();
     renderFileExplorer(fileTree);
     fetchCompile();
+    selectedFolderPath = "root";
 }
 
 function saveFileTree() {

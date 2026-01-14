@@ -155,7 +155,7 @@ document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
 
     const containerLeft = left.parentElement.getBoundingClientRect().left;
-    const newWidth = containerWidth - (e.clientX - containerLeft);
+    let newWidth = containerWidth - (e.clientX - containerLeft);
 
     if (newWidth < previewMinWidth) {
         newWidth=previewMinWidth

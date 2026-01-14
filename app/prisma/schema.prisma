@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique @db.VarChar(60)
+  password String
+  projects Project[]
+
+  @@map("users")
+}
+
+model Project {
+  id        Int    @id @default(autoincrement())
+  userId    Int    @map("user_id")
+  title     String @db.VarChar(60)
+  content   String?
+  fileTree  Json   @map("file_tree")
+  user      User   @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@map("projects")
+}

@@ -152,7 +152,8 @@ textarea {
     background: white;
 }
 
-.btnExport {
+.btnExport,
+.btnAction {
     padding: 8px 16px;
     border-radius: 6px;
     font-weight: 600;
@@ -163,7 +164,8 @@ textarea {
     transition: background 0.2s;
 }
 
-.btnExport:hover {
+.btnExport:hover,
+.btnAction:hover {
     background: var(--primary-hover);
 }
 
@@ -180,7 +182,7 @@ textarea {
     position: absolute;
     top: 70px;
     left: 20px;
-    width: 280px;
+    min-width: 280px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 12px;
@@ -188,6 +190,8 @@ textarea {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     padding: 16px;
     z-index: 1000;
+    max-height: calc(90vh - 60px);
+    overflow-y: auto;
 }
 
 .image-explorer h3 {

@@ -220,23 +220,15 @@ function saveFileTree() {
 }
 
 function getIcon(filename) {
-    let icon;
     const parts = filename.split(".");
     const extension = parts[parts.length - 1];
+    const ext = extension.toLowerCase();
 
-    switch (extension) {
-        case "json":
-            icon="📜"
-            break
-        case "typ":
-            icon="📘"
-            break;
-        case "tmTheme":
-            icon="📔"
-            break;
-        default:
-            icon="🖼️"
-            break;
-    }
-    return icon
+    if (["json"].includes(ext)) return "📜";
+    if (["typ"].includes(ext)) return "📘";
+    if (["tmtheme"].includes(ext)) return "📔";
+    if (["py", "sh", "js"].includes(ext)) return "📕";
+    if (["jpg", "jpeg", "svg", "png"].includes(ext)) return "🖼️";
+    
+    return "❓";
 }

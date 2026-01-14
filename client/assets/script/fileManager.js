@@ -11,7 +11,6 @@ export function getFolder(fileTree, path) {
     let curr = fileTree;
     
     for (const part of parts) {
-        console.log(curr.children)
         if (!curr.children[part] || curr.children[part].type !== "folder") {
             return null;
         }
@@ -48,7 +47,6 @@ function renderTreeRecursive(folder, container, path) {
                 document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
                 li.classList.add('selected-folder');
                 selectedFolderPath = currentPath;
-                console.log("Target folder set to:", selectedFolderPath);
             });
 
             li.draggable = true;
@@ -69,7 +67,8 @@ function renderTreeRecursive(folder, container, path) {
             renderTreeRecursive(item, ul, currentPath);
 
         } else if (item.type === "file") {
-            li.innerHTML = `🖼️ ${item.name}`;
+            let icon = getIcon(item.name)
+            li.innerHTML = `${icon} ${item.name}`;
             li.draggable = true;
             li.addEventListener('dragstart', e => { 
                 const filePath = path ? `${path}/${item.name}` : item.name;
@@ -121,7 +120,6 @@ export function initFileManager(btnShowImages, btnCreateFolder, btnUploadImages,
     rootDropZone.addEventListener("click", () => {
         document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
         selectedFolderPath = "root";
-        console.log("Target folder set to: root");
     });
     btnCreateFolder.addEventListener("click", () => {
         const folderName = prompt(`Create new folder in ${selectedFolderPath}:`);
@@ -219,4 +217,26 @@ function saveFileTree() {
     } catch (e) {
         console.error("Too much image, only the first ones were saved in localStorage.");
     }
+}
+
+function getIcon(filename) {
+    let icon;
+    const parts = filename.split(".");
+    const extension = parts[parts.length - 1];
+
+    switch (extension) {
+        case "json":
+            icon="📜"
+            break
+        case "typ":
+            icon="📘"
+            break;
+        case "tmTheme":
+            icon="📔"
+            break;
+        default:
+            icon="🖼️"
+            break;
+    }
+    return icon
 }

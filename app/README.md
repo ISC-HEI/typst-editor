@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Typst Editor
+**Typst Editor** is an online editor for Typst, offering a variety of features such as images, tables, and more. It is designed to make creating and managing Typst documents simple and efficient.
 
-## Getting Started
+## Table of Contents
+- [Project Structure](#project-structure)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation and Setup](#installation-and-setup)
+- [License](#license)
 
-First, run the development server:
-
+## Project Structure
+Here is the structure of the project:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+src/
+├── app
+│   ├── api
+│   │   └── projects
+│   │       └── save        # Saving the project to the db
+│   ├── dashboard           # Dashboard page
+│   ├── login               # Login page
+│   ├── page.tsx            # Default page (editor)
+│   └── signup              # Sign up page
+├── assets
+│   ├── script              # Script for the editor
+│   └── style
+├── components
+│   ├── Editor.jsx          # The editor
+│   ├── Footer.jsx          # The footer use in the dashboard
+│   ├── ProjectAction.jsx   # The menu of action in the dashboard
+│   └── ProjectCard.jsx     # A card of each project
+├── lib
+│   ├── auth.config.ts
+│   ├── auth.ts             # Authentification
+│   └── prisma.ts
+└── middleware.ts           # Middleware for route protection
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
+- Real-time Typst document editing
+- File and folder management directly in the browser
+- Zoom functionality for better readability
+- Saving in database and document export (PDF and SVG)
+- Opening file from the interface
+- Sharing a project to somebody else
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Prerequisites
+1. Developpement
+    - Node.js
+    - Bun
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Installation and Setup
+- Clone the repository:
+```bash
+git clone https://github.com/areynard13/typst-editor.git
+```
+### Start with docker
+- Verify that you are at the project root.
+- Start with docker
+```docker
+docker compose up -d --build
+```
+### Local Development
+- Open this repo (app)
+- Create a db in postgres
+- Enter the DATABASE_URL in the .env
+- Install dependencies and generate prisma
+```bash
+bun install
+bunx auth secret
+bunx prisma migrate dev
+bunx prisma generate
+```
 
-To learn more about Next.js, take a look at the following resources:
+- Start the api, documentation [here](../server/README.md)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Configuration
+The API url can be configured in [client/assets/script/api.js](/client/assets/script/api.js)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+The current License is Apache version 2.0, you can see it in the [LICENSE](../LICENSE) file.

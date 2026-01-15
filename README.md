@@ -49,7 +49,7 @@ docker compose up -d --build
 ## Repository structure
 ```bash
 .
-├── client/     # Web editor
+├── app/     # Web editor
 │   └── README.md
 ├── server/     # Typst API
 │   └── README.md

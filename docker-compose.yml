@@ -1,24 +1,46 @@
 services:
+  db:
+    image: postgres:15
+    container_name: typst-db
+    environment:
+      POSTGRES_USER: typst_user
+      POSTGRES_PASSWORD: qaywsxedc
+      POSTGRES_DB: typst_db
+    ports:
+      - "5432:5432"
+    networks:
+      - typst-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U typst_user -d typst_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   server:
     build: ./server
     container_name: typst-api
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
       - ./server:/app
     networks:
       - typst-network
   
-  client:
-    image: nginx:alpine
-    container_name: typst-client
+  app:
+    build: ./app
+    container_name: typst-app
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
     ports:
-      - "8080:80"
+      - "3000:3000"
     volumes:
-      - ./client:/usr/share/nginx/html:ro
+      - ./app:/app
     networks:
       - typst-network
-    
+    command: sh -c "npx auth secret && npx prisma generate && npx prisma migrate deploy && bun dev"
+
 networks:
   typst-network:
     driver: bridge

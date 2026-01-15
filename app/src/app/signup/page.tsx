@@ -1,7 +1,12 @@
+"use client"
+
+import { useActionState } from "react"
 import { signUpAction } from "./actions"
 import "../../assets/style/login.css"
 
 export default function SignUpPage() {
+  const [errorMessage, formAction, isPending] = useActionState(signUpAction, null)
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -10,7 +15,13 @@ export default function SignUpPage() {
           <p>Start building your project today</p>
         </div>
         
-        <form action={signUpAction} className="login-form">
+        <form action={formAction} className="login-form">
+
+          {errorMessage && (
+            <div className="error-banner">
+              {errorMessage}
+            </div>
+          )}
 
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
@@ -35,8 +46,12 @@ export default function SignUpPage() {
             />
           </div>
           
-          <button type="submit" className="btn-login">
-            Get Started
+          <button 
+            type="submit" 
+            className="btn-login"
+            disabled={isPending}
+          >
+            {isPending ? "Creating account..." : "Get Started"}
           </button>
         </form>
         

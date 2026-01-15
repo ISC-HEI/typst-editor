@@ -4,7 +4,9 @@ import { signIn } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
-export async function signUpAction(formData: FormData) {
+type ActionResponse = string | null | undefined;
+
+export async function signUpAction(prevState: ActionResponse, formData: FormData): Promise<ActionResponse> {
   try {
     const email = formData.get("email") as string
     const password = formData.get("password") as string
@@ -14,7 +16,7 @@ export async function signUpAction(formData: FormData) {
     })
 
     if (existingUser) {
-      throw new Error("User already exists")
+      return "User already exists."
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -26,7 +28,11 @@ export async function signUpAction(formData: FormData) {
       },
     })
 
-    await signIn("credentials", formData)
+    await signIn("credentials", {
+        email,
+        password,
+        redirectTo: "/dashboard"
+    })
 
   } catch (error) {
     if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
@@ -34,6 +40,6 @@ export async function signUpAction(formData: FormData) {
     }
     
     console.error("Sign up error:", error)
-    throw error
+    return "An error occurred during registration."
   }
 }

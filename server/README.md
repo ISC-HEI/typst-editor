@@ -23,13 +23,12 @@
 git clone https://github.com/areynard13/typst-editor.git
 cd typst-editor
 ```
-### Start with docker
-- Verify that you are at the project root.
-- Start with docker
-```docker
-docker compose up -d --build
+### Start Only The API
+install dependencies and run
 ```
-Once running, the API will be accessible at http://localhost:3000 and the client at http://127.0.0.1:8080.
+npm install
+npm run dev
+```
 
 ## Usage
 You can send requests to the API to compile Typst documents. Here's the endpoints:

@@ -2,35 +2,65 @@ import { loadProject } from "@/app/dashboard/actions"
 import Editor from "../components/Editor"
 import { redirect } from "next/navigation";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ projectId?: string }>
-}) {
+type FileTree = {
+  type: "folder" | "file";
+  name: string;
+  children: Record<string, FileTree>;
+};
+
+export default async function Page({ searchParams, }: { searchParams: Promise<{ projectId?: string }> }) {
   const { projectId } = await searchParams;
-  let projectData = { id:-1, title: "", content: "", fileTree: { children: {}} };
+
+  function normalizeFileTree(value: any): FileTree {
+    if (
+      value &&
+      typeof value === "object" &&
+      value.type &&
+      value.name &&
+      typeof value.children === "object"
+    ) {
+      return {
+        type: value.type === "file" ? "file" : "folder",
+        name: String(value.name),
+        children: value.children ?? {},
+      };
+    }
+
+    return { type: "folder", name: "root", children: {} };
+  }
+
+
+  let projectData: {
+    id: number;
+    title: string;
+    content: string;
+    fileTree: FileTree;
+  } = {
+    id: -1,
+    title: "",
+    content: "",
+    fileTree: { type: "folder", name: "root", children: {} },
+  };
 
   if (projectId) {
     const project = await loadProject(parseInt(projectId));
-    console.log(project)
+
     if (project) {
       projectData = {
         id: project.id,
         title: project.title,
         content: project.content || "",
-        fileTree: (project.fileTree && typeof project.fileTree === 'object' && 'children' in project.fileTree)
-          ? (project.fileTree as { children: Record<string, any> })
-          : { children: {} },
+        fileTree: normalizeFileTree(project.fileTree),
       };
     } else {
-      redirect('/dashboard');
+      redirect("/dashboard");
     }
   } else {
-    redirect('/dashboard');
+    redirect("/dashboard");
   }
-
+  console.log(projectData)
   return (
-    <Editor 
+    <Editor
       projectId={projectData.id}
       title={projectData.title}
       content={projectData.content}

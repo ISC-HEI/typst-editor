@@ -14,11 +14,12 @@
     --editor-padding-top: 15px;
 }
 
-body {
+.container-full {
     margin: 0;
     height: 100vh;
     width: 100vw;
     display: flex;
+    flex-direction: column;
     font-family: 'Inter', -apple-system, sans-serif;
     background-color: var(--bg-main);
     color: var(--text-main);
@@ -180,7 +181,7 @@ textarea {
 
 .image-explorer {
     position: absolute;
-    top: 70px;
+    top: 140px;
     left: 20px;
     min-width: 280px;
     background: rgba(255, 255, 255, 0.95);
@@ -245,4 +246,90 @@ ul {
 }
 .separator:hover {
     cursor: col-resize;
+}
+
+.editor-header {
+    height: 64px;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 100;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btnReturnDashboard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--sidebar-bg);
+    color: var(--text-main);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btnReturnDashboard:hover {
+    background: var(--border-color);
+    transform: translateX(-2px);
+    color: var(--primary);
+}
+
+.header-title-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-badge {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: -2px;
+}
+
+.editor-header h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.container-full {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1;
+    overflow: hidden;
+}
+
+.ImageExplorerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+#btnCloseImages svg {
+    fill: black !important;
 }

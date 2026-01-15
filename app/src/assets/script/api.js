@@ -1,6 +1,6 @@
 import { downloadBlob, formatDateNow } from './utils.js';
 
-const API_URL = "http://127.0.0.1:3000";
+const API_URL = "http://127.0.0.1:3001";
 
 // Collect images from file tree recursively
 function collectImages(folder) {

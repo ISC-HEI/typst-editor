@@ -1,3 +1,4 @@
+import { Oi } from 'next/font/google/index.js';
 import { fetchCompile, fileTree, currentProjectId } from './editor.js';
 
 const imageList = document.getElementById('imageList');
@@ -113,10 +114,13 @@ function updatePaths(item, newFolderPath) {
     }
 }
 
-export function initFileManager(btnShowImages, btnCreateFolder, btnUploadImages, imageFilesInput, rootDropZone) {
+export function initFileManager(btnShowImages, btnCloseImages, btnCreateFolder, btnUploadImages, imageFilesInput, rootDropZone) {
     btnShowImages.addEventListener("click", () => {
-        imageExplorer.style.display = imageExplorer.style.display === "none" ? "block" : "none";
+        imageExplorer.style.display = "block"
     });
+    btnCloseImages.addEventListener("click", () => {
+        imageExplorer.style.display = "none";        
+    })
     rootDropZone.addEventListener("click", () => {
         document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
         selectedFolderPath = "root";
@@ -180,19 +184,7 @@ export function initFileManager(btnShowImages, btnCreateFolder, btnUploadImages,
         const sourcePath = e.dataTransfer.getData("path");
         moveItem(sourcePath, "root", fileTree);
     });
-}
-
-export function loadFileTree() {
-    const savedTree = localStorage.getItem('fileTree');
-    if (savedTree) {
-        try {
-            const parsedTree = JSON.parse(savedTree);
-            Object.assign(fileTree, parsedTree);
-            renderFileExplorer(fileTree);
-        } catch (e) {
-            console.error("Failed to parse saved file tree:", e);
-        }
-    }
+    renderFileExplorer(fileTree);
 }
 
 async function deleteItem(path, fileTree) {

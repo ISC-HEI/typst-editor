@@ -56,6 +56,11 @@ textarea.addEventListener('scroll', () => {
 
 // ---------- Main compile function ----------
 export async function fetchCompile() {
+    page.innerHTML = `
+        <div class="loading-wrapper">
+            <div class="spinner"></div>
+        </div>
+    `;
     const svg = await fetchSvg(textarea.value, { children: fileTree.children });
     if (svg.startsWith("{")) {
         let error = JSON.parse(svg)

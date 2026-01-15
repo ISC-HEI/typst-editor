@@ -61,7 +61,7 @@ export default function Editor({ projectId, title, content, fileTree }) {
         <div className="header-right">
         </div>
       </header>
-      <div className="container">
+      <div className="container-app">
         <div className="editor-container">
           <nav>
             <div className="btnNavBarCategory">

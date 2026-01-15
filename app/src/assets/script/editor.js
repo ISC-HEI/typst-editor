@@ -5,11 +5,9 @@ export let fileTree = { type: "folder", name: "root", children: {} };
 export let currentFolderPath = "root";
 
 // ---------- Editor elements ----------
-const textarea = document.getElementById('editor');
-const lineNumbers = document.getElementById('lineNumbers');
+let editor;
 const page = document.getElementById("page");
 export let currentProjectId;
-autoSave()
 export const uploadedImages = {};
 
 // ---------- Formatting functions ----------
@@ -20,39 +18,25 @@ export function applyFormatting(type) {
         underline: ["#underline[", "]"]
     }[type];
 
-    if (!delimiters) return;
+    if (!delimiters || !editor) return;
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    if (start === end) return;
+    const selection = editor.getSelection();
+    const model = editor.getModel();
+    const selectedText = model.getValueInRange(selection);
 
-    const selectedText = textarea.value.substring(start, end);
+    if (selectedText === "") return;
+
     const newText = `${delimiters[0]}${selectedText}${delimiters[1]}`;
 
-    textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
-    textarea.selectionStart = start;
-    textarea.selectionEnd = start + newText.length;
-    textarea.focus();
+    editor.executeEdits("format", [{
+        range: selection,
+        text: newText,
+        forceMoveMarkers: true
+    }]);
 
     fetchCompile();
     autoSave();
 }
-
-// ---------- Line numbers ----------
-export function updateLineNumbers() {
-    const lines = textarea.value.split('\n').length;
-    lineNumbers.innerHTML = "";
-
-    for (let i = 1; i <= lines; i++) {
-        const span = document.createElement("span");
-        span.innerText = i;
-        lineNumbers.appendChild(span);
-    }
-}
-
-textarea.addEventListener('scroll', () => {
-    lineNumbers.scrollTop = textarea.scrollTop;
-});
 
 // ---------- Main compile function ----------
 export async function fetchCompile() {
@@ -61,7 +45,7 @@ export async function fetchCompile() {
             <div class="spinner"></div>
         </div>
     `;
-    const svg = await fetchSvg(textarea.value, { children: fileTree.children });
+    const svg = await fetchSvg(editor.getValue(), { children: fileTree.children });
     if (svg.startsWith("{")) {
         let error = JSON.parse(svg)
         let errorDetails = error.details ? error.details.split(": ")[1] : ""
@@ -92,7 +76,7 @@ export async function fetchCompile() {
 
 // ---------- File operations ----------
 export function downloadDocument() {
-    const content = textarea.value;
+    const content = editor.getValue();
     if (!content) return;
 
     const blob = new Blob([content], { type: "text/plain" });
@@ -106,20 +90,12 @@ export function downloadDocument() {
 }
 
 // ---------- Event listeners ----------
-export function initEditorListeners(projectId, fileTreeLoad, contentLoad, btnBold, btnItalic, btnUnderline, btnSave, btnOpen, fileInput, btnExportPdf, btnExportSvg) {
+export function initEditorListeners(monaco, projectId, fileTreeLoad, btnBold, btnItalic, btnUnderline, btnSave, btnOpen, fileInput, btnExportPdf, btnExportSvg) {
     currentProjectId = projectId
     fileTree=fileTreeLoad
-    textarea.value=contentLoad
-    textarea.addEventListener('input', () => { updateLineNumbers(); debounceFetchCompile(); });
-    textarea.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab') {
-            e.preventDefault();
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-
-            textarea.value = textarea.value.substring(0, start) + "\t" + textarea.value.substring(end);
-            textarea.selectionStart = textarea.selectionEnd = start + 1;
-        }
+    editor = monaco
+    editor.onDidChangeModelContent(() => { 
+        debounceFetchCompile(); 
     });
 
     btnBold.addEventListener('click', () => applyFormatting('bold'));
@@ -130,8 +106,8 @@ export function initEditorListeners(projectId, fileTreeLoad, contentLoad, btnBol
     btnOpen.addEventListener('click', () => fileInput.click());
     fileInput.addEventListener('change', openAndShowFile);
 
-    btnExportPdf.addEventListener('click', () => exportPdf(textarea.value, { children: fileTree.children }));
-    btnExportSvg.addEventListener('click', async () => exportSvg(await fetchSvg(textarea.value, { children: fileTree.children })));
+    btnExportPdf.addEventListener('click', () => exportPdf(editor.getValue(), { children: fileTree.children }));
+    btnExportSvg.addEventListener('click', async () => exportSvg(await fetchSvg(editor.getValue(), { children: fileTree.children })));
 }
 
 const debounceFetchCompile = debounce(async () => {
@@ -145,9 +121,9 @@ async function openAndShowFile() {
     if (!file) return;
     
     const reader = new FileReader();
-    reader.onload = (e) => { textarea.value = e.target.result; updateLineNumbers(); fetchCompile(); };
+    reader.onload = (e) => { editor.setValue(e.target.result);; fetchCompile(); };
     reader.readAsText(file);
-    await autoSave
+    await autoSave();
 }
 
 
@@ -185,7 +161,7 @@ document.addEventListener('mouseup', () => {
 async function autoSave() {
     if (!currentProjectId) return;
 
-    const content = textarea.value;
+    const content = editor.getValue();
     const currentFileTree = fileTree;
 
     try {

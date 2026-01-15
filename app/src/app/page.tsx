@@ -1,5 +1,5 @@
 import { loadProject } from "@/app/dashboard/actions"
-import Editor from "../components/Editor"
+import EditorClient from "../components/EditorClient";
 import { redirect } from "next/navigation";
 
 type FileTree = {
@@ -59,7 +59,7 @@ export default async function Page({ searchParams, }: { searchParams: Promise<{ 
   };
 
   return (
-    <Editor
+    <EditorClient
       projectId={projectData.id}
       title={projectData.title}
       content={projectData.content}

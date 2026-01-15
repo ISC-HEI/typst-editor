@@ -89,43 +89,6 @@ button {
     overflow: hidden;
 }
 
-.line-numbers, textarea {
-    font-family: var(--editor-font) !important;
-    font-size: var(--editor-font-size) !important;
-    line-height: var(--editor-line-height) !important;
-    padding-top: var(--editor-padding-top) !important;
-    margin: 0;
-}
-
-.line-numbers {
-    width: 50px;
-    background: var(--bg-main);
-    text-align: right;
-    padding-right: 12px;
-    color: #94a3b8;
-    border-right: 1px solid var(--border-color);
-    user-select: none;
-    overflow: hidden; 
-}
-
-.line-numbers span {
-    display: block;
-    height: var(--editor-line-height);
-}
-
-textarea {
-    flex: 1;
-    padding-left: 15px;
-    padding-right: 15px;
-    resize: none;
-    border: none;
-    outline: none;
-    background: var(--bg-editor);
-    color: #334155;
-    white-space: pre;
-    overflow-y: auto;
-}
-
 .preview {
     width: 50%;
     background: #cbd5e1;

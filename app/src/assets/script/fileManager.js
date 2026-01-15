@@ -1,4 +1,3 @@
-import { Oi } from 'next/font/google/index.js';
 import { fetchCompile, fileTree, currentProjectId } from './editor.js';
 
 const imageList = document.getElementById('imageList');

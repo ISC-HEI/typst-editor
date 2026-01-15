@@ -8,7 +8,6 @@ export async function signUpAction(formData: FormData) {
   try {
     const email = formData.get("email") as string
     const password = formData.get("password") as string
-    const name = formData.get("name") as string
 
     const existingUser = await prisma.user.findUnique({
       where: { email }

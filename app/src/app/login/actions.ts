@@ -17,9 +17,9 @@ export async function loginAction(prevState: ActionResponse, formData: FormData)
     }
 
     if (error instanceof AuthError) {
-      return "Identifiants incorrects."
+      return "Incorrect credentials."
     }
     
-    return "Une erreur inattendue est survenue."
+    return "An unexpected error has occurred."
   }
 }

@@ -15,7 +15,7 @@ export const authConfig = {
       }
       
       if (isLoggedIn && isAuthPage) {
-        return Response.redirect(new URL("/", nextUrl));
+        return Response.redirect(new URL("/dashboard", nextUrl));
       }
 
       return true;

@@ -53,7 +53,7 @@ export default function Editor({ projectId, title, content, fileTree }) {
             </svg>
           </a>
           <div className="header-title-container">
-            <span className="project-badge">Projet</span>
+            <span className="project-badge">Project</span>
             <h1>{title}</h1>
           </div>
         </div>

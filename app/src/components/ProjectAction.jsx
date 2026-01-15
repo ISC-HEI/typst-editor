@@ -47,7 +47,7 @@ export function ProjectActions({ projectId }) {
             onClick={handleShare}
             className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
           >
-            Partager
+            Share
           </button>
           
           <form action={deleteProject}>
@@ -56,7 +56,7 @@ export function ProjectActions({ projectId }) {
               type="submit"
               className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
             >
-              Supprimer
+              Delete
             </button>
           </form>
         </div>

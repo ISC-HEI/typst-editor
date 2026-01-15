@@ -135,13 +135,14 @@ const debounceFetchCompile = debounce(async () => {
 });
 
 // Open a local file
-function openAndShowFile() {
+async function openAndShowFile() {
     const file = fileInput.files[0];
     if (!file) return;
     
     const reader = new FileReader();
     reader.onload = (e) => { textarea.value = e.target.result; updateLineNumbers(); fetchCompile(); };
     reader.readAsText(file);
+    await autoSave
 }
 
 

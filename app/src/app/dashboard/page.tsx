@@ -1,41 +1,50 @@
-import Link from "next/link"
 import { getUserProjects, createProject } from "./actions"
+import { ProjectCard } from "../../components/ProjectCard"
 
 export default async function Dashboard() {
   const projects = await getUserProjects()
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Mes Projets</h1>
+    <main className="min-h-screen bg-gray-50 py-12 px-6">
+      <div className="max-w-3xl mx-auto">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+          <div>
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Tableau de bord</h1>
+            <p className="text-gray-500 mt-1">Gérez vos projets et collaborations.</p>
+          </div>
 
-      <form action={createProject} className="mb-8 flex gap-2">
-        <input 
-          name="title" 
-          placeholder="Nom du projet" 
-          className="border p-2 rounded"
-          required 
-        />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          Créer un projet
-        </button>
-      </form>
-
-      <div className="grid gap-4">
-        {projects.length === 0 ? (
-          <p>Aucun projet pour le moment.</p>
-        ) : (
-          projects.map((project) => (
-            <Link
-            href={`/?projectId=${project.id}`} 
-            key={project.id} 
-            className="p-4 border rounded shadow-sm hover:bg-gray-50 cursor-pointer block"
+          <form action={createProject} className="flex gap-2">
+            <input 
+              name="title" 
+              placeholder="Nouveau projet..." 
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              required 
+            />
+            <button 
+              type="submit" 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold transition-colors shadow-sm"
             >
-                <h3>{project.title}</h3>
-                <p className="text-sm text-gray-500">Ouvrir le projet</p>
-            </Link>
-          ))
-        )}
+              +
+            </button>
+          </form>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 gap-3">
+          {projects.length === 0 ? (
+            <div className="text-center py-20 bg-white border-2 border-dashed border-gray-200 rounded-2xl">
+              <p className="text-gray-400">No active project currently.</p>
+            </div>
+          ) : (
+            projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))
+          )}
+        </div>
+
       </div>
-    </div>
+    </main>
   )
 }

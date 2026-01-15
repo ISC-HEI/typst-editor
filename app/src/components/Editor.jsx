@@ -8,8 +8,6 @@ export default function Editor({ projectId, title, content, fileTree }) {
     import("../assets/script/editor.js").then(Editor => {
       import("../assets/script/zoom.js").then(Zoom => {
         import("../assets/script/fileManager.js").then(FileMgr => {
-          console.log("filetree")
-          console.log(fileTree)
           Editor.initEditorListeners(
             projectId,
             fileTree,

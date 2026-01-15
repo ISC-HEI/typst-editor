@@ -8,8 +8,8 @@ type FileTree = {
   children: Record<string, FileTree>;
 };
 
-export default async function Page({ searchParams, }: { searchParams: Promise<{ projectId?: string }> }) {
-  const { projectId } = await searchParams;
+export default async function Page({ searchParams, }: { searchParams: Promise<{ projectId?: string, code?: string }> }) {
+  const { projectId, code } = await searchParams;
 
   function normalizeFileTree(value: any): FileTree {
     if (
@@ -29,6 +29,9 @@ export default async function Page({ searchParams, }: { searchParams: Promise<{ 
     return { type: "folder", name: "root", children: {} };
   }
 
+  if (!projectId) {
+    redirect("/dashboard");
+  }
 
   let projectData: {
     id: number;
@@ -42,23 +45,19 @@ export default async function Page({ searchParams, }: { searchParams: Promise<{ 
     fileTree: { type: "folder", name: "root", children: {} },
   };
 
-  if (projectId) {
-    const project = await loadProject(parseInt(projectId));
+  const project = await loadProject(parseInt(projectId), code || undefined);
+  console.log(project)
 
-    if (project) {
-      projectData = {
-        id: project.id,
-        title: project.title,
-        content: project.content || "",
-        fileTree: normalizeFileTree(project.fileTree),
-      };
-    } else {
-      redirect("/dashboard");
-    }
-  } else {
+  if (!project) {
     redirect("/dashboard");
   }
-  console.log(projectData)
+  projectData = {
+    id: project.id,
+    title: project.title,
+    content: project.content || "",
+    fileTree: normalizeFileTree(project.fileTree),
+  };
+
   return (
     <Editor
       projectId={projectData.id}

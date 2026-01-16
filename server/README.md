@@ -28,10 +28,10 @@ The **Typst API** is a dedicated service that compile and convert typst document
 cd server
 
 # Install dependencies
-npm install
+bun i
 
 # Start development server
-npm run dev
+bun dev
 ```
 
 ## API Reference

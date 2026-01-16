@@ -129,12 +129,11 @@ async function openAndShowFile() {
 
 // -------- Change pages size --------
 const separator = document.getElementById('separator');
-const left = document.getElementById("preview")
+const right = document.getElementById("preview")
 
-const container = left.parentElement;
+const container = right.parentElement;
 const containerWidth = container.getBoundingClientRect().width;
 let isDragging = false;
-const previewMinWidth=250
 
 separator.addEventListener('mousedown', () => {
     isDragging = true;
@@ -144,13 +143,10 @@ separator.addEventListener('mousedown', () => {
 document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
 
-    const containerLeft = left.parentElement.getBoundingClientRect().left;
+    const containerLeft = right.parentElement.getBoundingClientRect().left;
     let newWidth = containerWidth - (e.clientX - containerLeft);
 
-    if (newWidth < previewMinWidth) {
-        newWidth=previewMinWidth
-    }
-    left.style.width = newWidth + 'px';
+    right.style.width = newWidth + 'px';
 });
 
 document.addEventListener('mouseup', () => {

@@ -80,6 +80,7 @@ button {
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--border-color);
+    min-width: 0; 
 }
 
 .editor {

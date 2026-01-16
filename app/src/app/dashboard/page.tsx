@@ -1,5 +1,5 @@
 import { getUserProjects, createProject } from "./actions"
-import { ProjectCard } from "../../components/ProjectCard"
+import { ProjectList } from "../../components/ProjectList"
 import Footer from "../../components/Footer"
 
 export default async function Dashboard() {
@@ -10,7 +10,6 @@ export default async function Dashboard() {
       <main className="min-h-screen bg-gray-50 py-12 px-6">
         <div className="max-w-3xl mx-auto">
 
-          {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
             <div>
               <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Dashboard</h1>
@@ -33,21 +32,7 @@ export default async function Dashboard() {
             </form>
           </div>
 
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 gap-3">
-            {projects.length === 0 ? (
-              <div className="text-center py-20 bg-white border-2 border-dashed border-gray-200 rounded-2xl">
-                <p className="text-gray-400">No projects currently.</p>
-              </div>
-            ) : (
-              <>
-                <h3>Your projects</h3>
-                {projects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </>
-            )}
-          </div>
+          <ProjectList initialProjects={projects} />
 
         </div>
       </main>

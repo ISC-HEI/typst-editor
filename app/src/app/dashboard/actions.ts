@@ -3,16 +3,33 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-const { randomBytes } = require('node:crypto');
 
 export async function getUserProjects() {
     const session = await auth()
     if (!session?.user?.id) throw new Error("No authorization")
 
-    return await prisma.project.findMany({
-        where: { userId: parseInt(session.user.id) },
+    const userId = parseInt(session.user.id)
+
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { sharedProjects: true }
+    })
+    const sharedIds = user?.sharedProjects || []
+
+    const projects = await prisma.project.findMany({
+        where: {
+            OR: [
+                { userId: userId },
+                { id: { in: sharedIds } }
+            ]
+        },
         orderBy: { id: 'desc' }
     })
+
+    return projects.map(project => ({
+        ...project,
+        isAuthor: project.userId === userId
+    }))
 }
 
 export async function createProject(formData: FormData) {

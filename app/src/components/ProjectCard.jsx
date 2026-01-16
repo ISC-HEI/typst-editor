@@ -21,6 +21,7 @@ export function ProjectCard({ project }) {
           projectId={project.id}
           usersSharing={project.sharedUsers}
           title={project.title}
+          isAuthor={project.isAuthor}
           />
       </div>
     </div>

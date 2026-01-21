@@ -1,0 +1,50 @@
+export let refs = {
+  page: null,
+  editor: null,
+
+  btnZoomIn: null,
+  btnZoomOut: null,
+  zoomLevelDisplay: null,
+
+  btnSave: null,
+  btnOpen: null,
+  btnBold: null,
+  btnItalic: null,
+  btnUnderline: null,
+  btnExportPdf: null,
+  btnExportSvg: null,
+
+  fileInputOpen: null,
+
+  imageList: null,
+  imageExplorer: null,
+  btnShowImages: null,
+  btnCloseImages: null,
+  btnCreateFolder: null,
+  btnUploadImages: null,
+  imageFilesInput: null,
+  rootDropZone: null
+};
+
+export let infos = {
+    currentProjectId: null
+}
+
+export let functions = {
+  openCustomPrompt: null
+}
+
+export const initPreviewRefs = (elements) => {
+  refs = { ...refs, ...elements };
+  console.log("Refs initialized", refs);
+};
+
+export const initPreviewInfos = (elements) => {
+  infos = { ...infos, ...elements };
+  console.log("Info initialized", infos);
+}
+
+export const initPreviewFunctions = (elements) => {
+  functions = { ...functions, ...elements };
+  console.log("Functions initialized", functions)
+}

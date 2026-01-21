@@ -7,6 +7,9 @@ import { Toolbar } from "./Toolbar.jsx";
 import { FileExplorer } from "./FileExplorer";
 import { PreviewPane } from "./PreviewPane";
 import { PromptModal } from "./PromptModal";
+import { initPreviewFunctions, initPreviewInfos, initPreviewRefs } from "@/hooks/refs";
+import { useEditorWatcher } from "@/hooks/useEditor";
+
 
 const MonacoEditor = dynamic(
   () => import("./MonacoEditor").then((mod) => mod.MonacoEditor),
@@ -17,40 +20,20 @@ export default function Editor({ projectId, title, content, fileTree }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({ title: "", callback: null });
   const [inputValue, setInputValue] = useState("");
+  useEditorWatcher()
 
   const handleEditorReady = async (instance) => {
-    try {
-      const [EditorScript, FileMgrScript] = await Promise.all([
-        import("../../assets/script/editor.js"),
-        import("../../assets/script/fileManager.js"),
-      ]);
-
-      EditorScript.initEditorListeners(
-        instance, projectId, fileTree,
-        document.getElementById("btnBold"),
-        document.getElementById("btnItalic"),
-        document.getElementById("btnUnderline"),
-        document.getElementById("btnSave"),
-        document.getElementById("btnOpen"),
-        document.getElementById("fileInput"),
-        document.getElementById("btnExportPdf"),
-        document.getElementById("btnExportSvg")
-      );
-
-      FileMgrScript.initFileManager(
-        document.getElementById("btnShowImages"),
-        document.getElementById("btnCloseImages"),
-        document.getElementById("btnCreateFolder"),
-        document.getElementById("btnUploadImages"),
-        document.getElementById("imageFilesInput"),
-        document.getElementById("rootDropZone"),
-        openCustomPrompt
-      );
-
-      EditorScript.fetchCompile();
-    } catch (error) {
-      console.error("Erreur chargement scripts :", error);
+    if (instance) {
+      initPreviewRefs({
+        editor: instance
+      })
     }
+    initPreviewInfos({
+      currentProjectId: projectId
+    })
+    initPreviewFunctions({
+      openCustomPrompt: openCustomPrompt
+    })
   };
 
   const openCustomPrompt = (title, callback) => {

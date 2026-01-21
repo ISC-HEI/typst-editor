@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ZoomOut, ZoomIn, Download } from "lucide-react";
-import { initZoom } from "../../hooks/useZoom"
+import { initPreviewRefs } from "@/hooks/refs";
+import { useZoomWatcher } from "@/hooks/useZoom"
 
 export const PreviewPane = () => {
   const btnInRef = useRef(null);
@@ -8,16 +9,24 @@ export const PreviewPane = () => {
   const pageRef = useRef(null);
   const displayRef = useRef(null);
 
+  const btnExportPdfRef = useRef(null);
+  const btnExportSvgRef = useRef(null);
+  useZoomWatcher();
+
   useEffect(() => {
-    if (btnInRef.current && btnOutRef.current && pageRef.current && displayRef.current) {
-      initZoom(
-        btnInRef.current,
-        btnOutRef.current,
-        pageRef.current,
-        displayRef.current
-      );
+    if (btnInRef.current && btnOutRef.current && pageRef.current && displayRef.current && btnExportPdfRef.current && btnExportSvgRef.current) {
+      initPreviewRefs({
+        page: pageRef.current,
+
+        btnExportPdf: btnExportPdfRef.current,
+        btnExportSvg: btnExportSvgRef.current,
+
+        btnZoomIn: btnInRef.current,
+        btnZoomOut: btnOutRef.current,
+        zoomLevelDisplay: displayRef.current
+      });
     }
-  }, [initZoom]);
+  }, []);
 
   return (
     <div className="flex-1 bg-slate-100 overflow-hidden flex flex-col">
@@ -46,10 +55,10 @@ export const PreviewPane = () => {
         </div>
         
         <div className="flex gap-2">
-          <button id="btnExportPdf" className="flex items-center gap-2 text-[12px] font-semibold py-1.5 px-3 bg-white border border-slate-200 rounded-lg hover:bg-slate-50">
+          <button ref={btnExportPdfRef} className="flex items-center gap-2 text-[12px] font-semibold py-1.5 px-3 bg-white border border-slate-200 rounded-lg hover:bg-slate-50">
             <Download size={14} /> PDF
           </button>
-          <button id="btnExportSvg" className="flex items-center gap-2 text-[12px] font-semibold py-1.5 px-3 bg-white border border-slate-200 rounded-lg hover:bg-slate-50">
+          <button ref={btnExportSvgRef} className="flex items-center gap-2 text-[12px] font-semibold py-1.5 px-3 bg-white border border-slate-200 rounded-lg hover:bg-slate-50">
             <Download size={14} /> SVG
           </button>
         </div>

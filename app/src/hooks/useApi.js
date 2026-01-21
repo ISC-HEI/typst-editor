@@ -1,8 +1,7 @@
-import { downloadBlob, formatDateNow } from './utils.js';
+import { downloadBlob, formatDateNow } from "./useUtils";
 
 const NEXT_PUBLIC_COMPILER_URL = process.env.NEXT_PUBLIC_COMPILER_URL
 
-// Collect images from file tree recursively
 function collectImages(folder) {
     let result = {};
     const children = folder && folder.children ? folder.children : {};
@@ -20,7 +19,8 @@ function collectImages(folder) {
     return result;
 }
 
-// Send source + images to server and get SVG
+// ----------------------------------------------------
+
 export async function fetchSvg(source, fileTree) {
     if (!source && Object.keys(fileTree.children).length === 0) return "";
     try {
@@ -36,7 +36,8 @@ export async function fetchSvg(source, fileTree) {
     }
 }
 
-// Export PDF
+// ----------------------------------------------------
+
 export async function exportPdf(source, fileTree) {
     if (!source) return;
 
@@ -61,7 +62,6 @@ export async function exportPdf(source, fileTree) {
     }
 }
 
-// Export SVG
 export function exportSvg(svgContent) {
     if (!svgContent) return;
     

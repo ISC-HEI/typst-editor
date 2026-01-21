@@ -20,9 +20,8 @@ export default function Editor({ projectId, title, content, fileTree }) {
 
   const handleEditorReady = async (instance) => {
     try {
-      const [EditorScript, ZoomScript, FileMgrScript] = await Promise.all([
+      const [EditorScript, FileMgrScript] = await Promise.all([
         import("../../assets/script/editor.js"),
-        import("../../assets/script/zoom.js"),
         import("../../assets/script/fileManager.js"),
       ]);
 
@@ -36,11 +35,6 @@ export default function Editor({ projectId, title, content, fileTree }) {
         document.getElementById("fileInput"),
         document.getElementById("btnExportPdf"),
         document.getElementById("btnExportSvg")
-      );
-
-      ZoomScript.initZoom(
-        document.getElementById("btnZoomIn"),
-        document.getElementById("btnZoomOut")
       );
 
       FileMgrScript.initFileManager(

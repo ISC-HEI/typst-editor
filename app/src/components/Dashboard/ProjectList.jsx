@@ -32,7 +32,7 @@ export function ProjectList({ initialProjects }) {
             checked={showShared}
             onChange={(e) => setShowShared(e.target.checked)}
           />
-          Show shared project
+          Show guest project
         </label>
       </div>
 

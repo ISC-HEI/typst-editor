@@ -4,6 +4,7 @@ import { Folder, Users, ChevronRight } from "lucide-react"
 
 export function ProjectCard({ project }) {
   const isSharedWithMe = !project.isAuthor;
+  const isShared = project.sharedUsers.length != 0 && !isSharedWithMe
 
   return (
     <div className="group relative bg-white border border-slate-200 rounded-2xl p-5 hover:border-blue-400 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-300 flex items-center justify-between">
@@ -29,6 +30,11 @@ export function ProjectCard({ project }) {
             {isSharedWithMe && (
               <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md">
                 Guest
+              </span>
+            )}
+            {isShared && (
+              <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-blue-100 text-blue-700 rounded-md">
+                Shared
               </span>
             )}
           </div>

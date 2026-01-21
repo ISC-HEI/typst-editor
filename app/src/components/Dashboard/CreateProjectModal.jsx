@@ -83,13 +83,17 @@ export default function CreateProjectModal() {
                                 </button>
                             )}
                         </div>
-
                         <form
-                            action={async (formData) => {
+                            onSubmit={async (e) => {
+                                e.preventDefault();
                                 setIsCreating(true);
+                                
+                                const formData = new FormData(e.currentTarget);
                                 try {
                                     await createProject(formData);
                                     setIsOpen(false);
+                                } catch (error) {
+                                    console.error("Erreur lors de la création:", error);
                                 } finally {
                                     setIsCreating(false);
                                 }

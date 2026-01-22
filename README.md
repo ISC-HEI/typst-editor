@@ -1,4 +1,4 @@
-<<div align="center">
+<div align="center">
     <h1>
         <img alt="Typst" src="https://user-images.githubusercontent.com/17899797/226108480-722b770e-6313-40d7-84f2-26bebb55a281.png">
         Typst Online Editor

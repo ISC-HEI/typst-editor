@@ -12,7 +12,7 @@ export const EditorHeader = ({ title }) => (
         <div className="bg-blue-50 text-blue-600 p-1.5 rounded">
           <FileText size={16} />
         </div>
-        <h1 className="font-semibold text-sm tracking-tight">{title}</h1>
+        <h1 className="font-semibold text-sm tracking-tight" data-test="editor-title">{title}</h1>
       </div>
     </div>
     <div className="flex items-center gap-3">

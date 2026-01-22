@@ -36,7 +36,7 @@ export function ProjectList({ initialProjects }) {
         </label>
       </div>
 
-      <div className="grid grid-cols-1 gap-3">
+      <div className="grid grid-cols-1 gap-3" data-test="project-list">
         {filteredProjects.length === 0 ? (
           <div className="text-center py-20 bg-white border-2 border-dashed border-gray-200 rounded-2xl">
             <p className="text-gray-400">No project found.</p>

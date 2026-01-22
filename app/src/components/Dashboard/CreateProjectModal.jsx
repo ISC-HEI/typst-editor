@@ -46,6 +46,7 @@ export default function CreateProjectModal() {
         <>
             <button
                 onClick={() => setIsOpen(true)}
+                data-test="create-project-button"
                 className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg active:scale-95"
             >
                 <Plus size={20} /> New Project
@@ -114,6 +115,8 @@ export default function CreateProjectModal() {
                                                 ? "border-blue-500 bg-blue-50/50 ring-4 ring-blue-50"
                                                 : "border-slate-100 hover:border-slate-200 hover:bg-slate-50"
                                             } ${isCreating ? "opacity-50 cursor-not-allowed" : ""}`}
+                                            data-test={t.name}
+
                                     >
                                         <input
                                             type="radio"
@@ -137,6 +140,7 @@ export default function CreateProjectModal() {
                                 <input
                                     name="title"
                                     type="text"
+                                    data-test="project-name-input"
                                     disabled={isCreating}
                                     placeholder="Ex: Final internship report"
                                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"

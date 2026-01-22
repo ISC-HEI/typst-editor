@@ -80,7 +80,7 @@ export default function SharedUserWindow({ projectId, title, users, onClose, onR
                             onClick={handleShare}
                             disabled={isPending || !email}
                         >
-                            {isPending ? <Loader2 className="animate-spin" size={20} /> : <Plus size={20} />}
+                            {isPending ? <Loader2 className="animate-spin" size={20} /> : <Plus data-test="add-shared-user" size={20} />}
                         </button>
                     </div>
 
@@ -90,7 +90,7 @@ export default function SharedUserWindow({ projectId, title, users, onClose, onR
                         </div>
                     )}
 
-                    <div className="mt-8">
+                    <div className="mt-8" data-test="shared-user-container">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                             <Users size={14} /> Shared with ({users.length})
                         </h3>

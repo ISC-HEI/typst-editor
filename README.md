@@ -1,4 +1,4 @@
-<div align="center">
+<<div align="center">
     <h1>
         <img alt="Typst" src="https://user-images.githubusercontent.com/17899797/226108480-722b770e-6313-40d7-84f2-26bebb55a281.png">
         Typst Online Editor
@@ -10,13 +10,13 @@
     <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
     <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
     <img src="https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white" />
+    <img src="https://img.shields.io/badge/Cypress-69D3A7?logo=cypress&logoColor=fff&style=for-the-badge" />
   </div>
 
   <br />
 
   [Explore Docs](./app/README.md) • [API Reference](./server/README.md) • [Report Bug](https://github.com/ISC-HEI/typst-editor/issues)
 </div>
-
 
 ## Key Features
 
@@ -25,6 +25,7 @@
 | **Web Editor** | Real-time preview, VSCode-like editor, template gallery, multi-user project sharing. |
 | **Compilation API** | Typst to PDF/SVG rendering, isolated environments, Base64 image processing. |
 | **Architecture** | Dockerized monorepo, Prisma ORM for seamless DB management, Next.js Server Actions. |
+| **Testing** | Automated End-to-End testing with Cypress, integrated into the Docker lifecycle. |
 
 ## Tech Stack
 
@@ -33,22 +34,48 @@
 - **Database:** PostgreSQL with Prisma ORM.
 - **DevOps:** Docker Compose, GitHub Actions (CI/CD).
 
+## Testing
+The project includes a robust End-to-End (E2E) testing suite powered by **Cypress**. These tests ensure that critical user flows remain stable and functional.
+
+**Tested Scenarios:**
+- **Authentication:** Sign-up, Login, and Logout flows.
+- **Project Lifecycle:** Creating projects using various templates (Blank, Thesis, Report).
+- **Collaboration:** Sharing projects, handling non-existent users, self-sharing prevention, and managing permissions.
+
+### Running Tests
+To run the full suite and shut down the environment automatically (ideal for CI):
+```bash
+docker compose up --build --exit-code-from test
+```
+To run tests while the application is already running in development mode:
+```bash
+docker compose run test
+```
+
 ## Getting Started
 
 ### Prerequisites
-- Docker & Docker Compose
-- Node.js (Optional, for local development)
+- **Docker & Docker Compose** (Required)
+- **Node.js / Bun** (Optional, for local development outside Docker)
 
 ### One-Command Setup
-The entire stack (App, API, Database) can be launched instantly:
+To launch the entire stack (App, API, Database) for development and see the tests run automatically:
 ```bash
 git clone https://github.com/ISC-HEI/typst-editor.git
 cd typst-editor
 docker compose up -d --build
 ```
-*The editor will be available at http://localhost:3000 and the API at http://localhost:3001*
+> Note: The test container will launch, execute the suite, and exit. The App, API, and Database will remain running in the background for you to work on.
 
-> For developement start, please see both README.
+* Editor UI: http://localhost:3000  
+* Compilation API: http://localhost:3001
+
+### Development Workflow
+
+For active development, we recommend using the following command to see live logs while you code:
+```bash
+docker compose up --build
+```
 
 ## Configuration & Environment (optional)
 
@@ -65,8 +92,10 @@ GITHUB_TOKEN=your_github_token_here
 ## Repository Structure
 ```bash
 .
-├── app/            # Frontend Next.js application
-├── server/         # Node.js Typst Compilation Service
+├── app/              # Frontend Next.js application
+├── server/           # Node.js Typst Compilation Service
+├── cypress/          # Cypress E2E specs and support files
+├── cypress.config.js # Cypress configuration
 ├── docker-compose.yml
 └── LICENSE
 ```

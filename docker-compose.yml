@@ -34,6 +34,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: always
     ports:
       - "3000:3000"
@@ -46,6 +51,20 @@ services:
       - DATABASE_URL=postgresql://typst_user:qaywsxedc@db:5432/typst_db
       - NEXT_PUBLIC_COMPILER_URL=http://127.0.0.1:3001
     command: sh -c "bun install && bun x prisma generate && bun x prisma migrate deploy && bun dev"
+
+  test:
+    image: cypress/included:13.15.0
+    container_name: typst_test
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - ./:/opt/app
+    working_dir: /opt/app
+    networks:
+      - typst-network
+    environment:
+      - CYPRESS_baseUrl=http://app:3000
 
 networks:
   typst-network:

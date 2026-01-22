@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [errorMessage, formAction, isPending] = useActionState(loginAction, null)
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-6" data-test="login-form">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-10 shadow-sm border border-gray-200 rounded-2xl">
         <div className="text-center mb-8">
@@ -22,7 +22,7 @@ export default function LoginPage() {
           <form action={formAction} className="space-y-6">
             
             {errorMessage && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm" data-test="error-container">
                 {errorMessage}
               </div>
             )}
@@ -59,6 +59,7 @@ export default function LoginPage() {
             </div>
             
             <button 
+              data-test="button-submit"
               type="submit" 
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               disabled={isPending}

@@ -57,7 +57,7 @@ export default async function Dashboard() {
                   <Users size={24} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-500">Shared with me</p>
+                  <p className="text-sm font-medium text-slate-500">Shared</p>
                   <p className="text-2xl font-bold text-slate-900">{sharedProjects}</p>
                 </div>
               </div>

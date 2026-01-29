@@ -60,6 +60,7 @@ docker compose run test
 
 ### One-Command Setup
 To launch the entire stack (App, API, Database) for development and see the tests run automatically:
+> Please do the [Configuration](#configuration--environment) before.
 ```bash
 git clone https://github.com/ISC-HEI/typst-editor.git
 cd typst-editor
@@ -82,7 +83,7 @@ docker compose up --build
 To support frequent template searches and avoid GitHub API rate limiting, you must configure a Personal Access Token.
 
 1. **Create a Token:** Go to [GitHub Settings](https://github.com/settings/tokens) and generate a **Personal Access Token (classic)**. No specific scopes are required for public repositories.
-2. **Update your `.env`:** Add your token to the `app/` environment file:
+2. **Update your `.env`:** Add your token to the `app/` environment file: Or add it in the docker compose in the app.
 
 ```env
 GITHUB_TOKEN=your_github_token_here

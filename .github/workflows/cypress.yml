@@ -22,13 +22,24 @@ jobs:
           docker compose up -d --build
           echo "Waiting for services to be healthy..."
           docker compose ps
+          sleep 15
 
-      - name: Run Cypress tests
-        run: |
-          docker compose run --rm test
+      - name: Check GitHub token
+        run: echo "Token present? ${GITHUB_TOKEN:0:4}****"
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
+      - name: Run Cypress tests
+        run: docker compose run --rm -e GITHUB_TOKEN=${{ secrets.TOKEN }} test
+
+      - name: Upload Cypress Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-results
+          path: |
+            ./cypress/results/screenshots
+            ./cypress/results/videos
+
       - name: Tear down Docker Compose
         if: always()
-        run: docker-compose down
+        run: docker compose down

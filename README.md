@@ -77,7 +77,7 @@ For active development, we recommend using the following command to see live log
 docker compose up --build
 ```
 
-## Configuration & Environment (optional)
+## Configuration & Environment
 
 To support frequent template searches and avoid GitHub API rate limiting, you must configure a Personal Access Token.
 

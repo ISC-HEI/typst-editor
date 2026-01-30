@@ -93,7 +93,7 @@ To launch the entire stack (App, API, Database) and see the tests run automatica
 > Make sure you completed the [Configuration](#configuration--environment) before.
 ```bash
 git clone https://github.com/ISC-HEI/typst-editor.git
-cd tisc-editor
+cd typst-editor
 docker compose up -d --build
 ```
 > Note: The test container will launch, execute the suite, and exit. The App, API, and Database will remain running in the background for you to work on.

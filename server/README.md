@@ -6,7 +6,7 @@
 
 ## Overview
 
-The **TISC API** is a dedicated service that compile and convert typst document. It is designed to be **stateless** and **secure**, receiving all project assets (code, images, modules) via Base64 to produce professional PDF or SVG outputs instantly.
+The **TISC API** is a dedicated service that compile and convert typst document. It is designed to be **stateless** and **secure**, receiving all project assets (code, images, modules) via Base64 to produce professional PDF or SVG outputs instantly. It also include a websocket server for multi editing.
 
 
 
@@ -21,8 +21,16 @@ The **TISC API** is a dedicated service that compile and convert typst document.
 
 ### 1. Prerequisites
 - **Node.js**
+- **Bun**
 
-### 2. Installation
+### 2. Environment Setup
+Create a `.env` file in the `server/` directory:
+```bash
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/tisc_db"
+```
+
+### 3. Installation
 ```bash
 # Navigate to the server directory
 cd server

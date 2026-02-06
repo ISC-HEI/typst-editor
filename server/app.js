@@ -2,11 +2,18 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
 const { NodeCompiler } = require('@myriaddreamin/typst-ts-node-compiler');
 
 const $typst = NodeCompiler.create({ inputs: { 'X': 'u' } });
 const app = express();
 const PORT = 3001;
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
 
 app.use(cors());
 app.use(express.text({ limit: '50mb', type: '*/*' }));
@@ -106,4 +113,21 @@ app.post('/export/pdf', (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Typst API server running on http://localhost:${PORT}`));
+// -------- WEBSOCKET --------
+io.on('connection', (socket) => {
+  console.log(`New user : ${socket.id}`);
+
+  socket.on('join-document', (docId) => {
+    // Check if he autorize
+    socket.join(docId);
+    console.log(`Socket ${socket.id} a rejoint le document ${docId}`);
+  });
+
+  socket.on('update-content', ({ docId, content }) => {
+    socket.to(docId).emit('content-updated', content);
+  });
+});
+
+server.listen(PORT, () => {
+  console.log(`Typst API & WebSocket server running on http://localhost:${PORT}`);
+});
